@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Demo</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="description" content="Demo project">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+		<script>
+		
+			var ref = new Firebase("https://project-3351723142096034396.firebaseio.com/");
+			var insideData = new Firebase("https://project-3351723142096034396.firebaseio.com/data/");
+			var H1inputVal, H2inputVal
+			
+			ref.on("value", function(snapshot) {
+				console.log("H1inputVal " + H1inputVal);
+				$("#h1input").val(H1inputVal);
+				console.log("H2inputVal " + H2inputVal);
+				$("#h2input").val(H2inputVal);
+			}, function (errorObject) {
+				console.log("The read failed: " + errorObject.code);
+			});
+				
+			insideData.endAt().limitToLast(1).on('child_added', function(snapshot) {
+				console.log("Lastest h1 key : " + snapshot.key() + '\n' +  "Lastest h1 data : " + snapshot.child("h1").val());
+				H1inputVal = snapshot.child("h1").val();
+				console.log("Lastest h2 key : " + snapshot.key() + '\n' +  "Lastest h2 data : " + snapshot.child("h2").val());
+				H1inputVal = snapshot.child("h2").val();
+			});
+			
+			ref.on("child_changed", function(snapshot) {
+			  var changedData = snapshot.val();
+			  console.log("Updated Data : " + changedData);
+			});
+			
+	$(document).ready(function(){
+	
+		$("#h1input").on("focusout",function(){
+			H1inputVal = $(this).val();
+			console.log("Set H1inputVal " + H1inputVal);
+			insideData.push({
+			  "h1": H1inputVal
+			});
+		})
+		$("#h2input").on("focusout",function(){
+			H2inputVal = $(this).val();
+			console.log("Set H2inputVal " + H2inputVal);
+			insideData.push({
+			  "h2": H2inputVal
+			});
+		})
+		
+	})
+		
+		</script>
+			
+		<style type="text/css">
+
+		</style>
+
+	</head>
+	<body>
+	<br /><br /><br /><br /><br />
+		H1 : <input type="text" id="h1input" value=""><br /><br />
+		H2 : <input type="text" id="h2input" value="">
+	</body>
+	<script type="text/javascript">
+
+	</script>
+</html>
