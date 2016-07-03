@@ -7,9 +7,30 @@
 		<meta name="description" content="Demo project">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+		<script src="jquery.min.js"></script>
+		<!-- <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script> -->
+		<script src="firebase.js"></script>
 		<script>
+		$(document).ready(function(){
+	
+			$("#h1input").on("focusout",function(){
+				H1inputVal = $(this).val();
+				console.log("Set H1inputVal " + H1inputVal);
+				insideData.push({
+				  "h1": H1inputVal
+				});
+			})
+			$("#h2input").on("focusout",function(){
+				H2inputVal = $(this).val();
+				console.log("Set H2inputVal " + H2inputVal);
+				insideData.push({
+				  "h2": H2inputVal
+				});
+			})
+			
+		})	
+		
 		
 			var ref = new Firebase("https://project-3351723142096034396.firebaseio.com/");
 			var insideData = new Firebase("https://project-3351723142096034396.firebaseio.com/data/");
@@ -28,32 +49,13 @@
 				console.log("Lastest h1 key : " + snapshot.key() + '\n' +  "Lastest h1 data : " + snapshot.child("h1").val());
 				H1inputVal = snapshot.child("h1").val();
 				console.log("Lastest h2 key : " + snapshot.key() + '\n' +  "Lastest h2 data : " + snapshot.child("h2").val());
-				H1inputVal = snapshot.child("h2").val();
+				H2inputVal = snapshot.child("h2").val();
 			});
 			
 			ref.on("child_changed", function(snapshot) {
 			  var changedData = snapshot.val();
 			  console.log("Updated Data : " + changedData);
 			});
-			
-	$(document).ready(function(){
-	
-		$("#h1input").on("focusout",function(){
-			H1inputVal = $(this).val();
-			console.log("Set H1inputVal " + H1inputVal);
-			insideData.push({
-			  "h1": H1inputVal
-			});
-		})
-		$("#h2input").on("focusout",function(){
-			H2inputVal = $(this).val();
-			console.log("Set H2inputVal " + H2inputVal);
-			insideData.push({
-			  "h2": H2inputVal
-			});
-		})
-		
-	})
 		
 		</script>
 			
